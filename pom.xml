@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.1</version>
+		<version>2.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -14,26 +14,16 @@
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>17</java.version>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
+		<java.version>15</java.version>
+		<app.image.name>springboot-react-fullstack</app.image.name>
+		<app.image.tag/>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -44,6 +34,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -57,13 +54,22 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-autoconfigure</artifactId>
-			<version>2.6.2</version>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.javafaker</groupId>
+			<artifactId>javafaker</artifactId>
+			<version>1.0.2</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -76,105 +82,24 @@
 					</excludes>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>jib-maven-plugin</artifactId>
-				<version>3.2.1</version>
+				<version>2.5.2</version>
 				<configuration>
-
 					<from>
-						<image>openjdk:17</image>
+						<image>openjdk:15</image>
 					</from>
-
 					<container>
-						<mainClass>com.example.demo.Main</mainClass>
 						<ports>
 							<port>8080</port>
 						</ports>
 						<format>OCI</format>
 					</container>
-					<!--<allowInsecureRegistries>true</allowInsecureRegistries>-->
-
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
-<!--	<profiles>-->
-<!--		<profile>-->
-<!--			<id>build-frontend</id>-->
-<!--			<activation>-->
-<!--				<activeByDefault>true</activeByDefault>-->
-<!--			</activation>-->
-<!--			<build>-->
-<!--				<plugins>-->
-<!--					<plugin>-->
-<!--						<groupId>com.github.eirslett</groupId>-->
-<!--						<artifactId>frontend-maven-plugin</artifactId>-->
-<!--						&lt;!&ndash; Use the latest released version:-->
-<!--                                  https://repo1.maven.org/maven2/com/github/eirslett/frontend-maven-plugin/ &ndash;&gt;-->
-<!--						<version>1.11.2</version>-->
-<!--						<configuration>-->
-<!--							<nodeVersion>v4.6.0</nodeVersion>-->
-<!--							<workingDirectory>src/frontend</workingDirectory>-->
-<!--						</configuration>-->
-<!--						<executions>-->
-<!--							<execution>-->
-<!--								<id>install node and npm</id>-->
-<!--								<goals>-->
-<!--									<goal>install-node-and-npm</goal>-->
-<!--								</goals>-->
-<!--								<configuration>-->
-<!--									<nodeVersion>v15.4.0</nodeVersion>-->
-<!--									<npmVersion>7.3.0</npmVersion>-->
-<!--								</configuration>-->
-<!--							</execution>-->
-<!--							<execution>-->
-<!--								<id>npm install</id>-->
-<!--								<goals>-->
-<!--									<goal>npm</goal>-->
-<!--								</goals>-->
-<!--								<configuration>-->
-<!--									<arguments>install</arguments>-->
-<!--								</configuration>-->
-<!--							</execution>-->
-<!--							<execution>-->
-<!--								<id>npm run build</id>-->
-<!--								<goals>-->
-<!--									<goal>npm</goal>-->
-<!--								</goals>-->
-<!--								<configuration>-->
-<!--									<arguments>run build</arguments>-->
-<!--								</configuration>-->
-<!--							</execution>-->
-<!--						</executions>-->
-<!--					</plugin>-->
-<!--					<plugin>-->
-<!--						<artifactId>maven-resources-plugin</artifactId>-->
-<!--						<executions>-->
-<!--							<execution>-->
-<!--								<id>copy-build-folder</id>-->
-<!--								<phase>process-classes</phase>-->
-<!--								<goals>-->
-<!--									<goal>copy-resources</goal>-->
-<!--								</goals>-->
-<!--								<configuration>-->
-<!--									<resources>-->
-<!--										<resource>-->
-<!--											<directory>src/frontend/build</directory>-->
-<!--										</resource>-->
-
-<!--									</resources>-->
-<!--									<outputDirectory>${basedir}/target/classes/static</outputDirectory>-->
-<!--								</configuration>-->
-<!--							</execution>-->
-<!--						</executions>-->
-<!--					</plugin>-->
-<!--				</plugins>-->
-<!--			</build>-->
-<!--		</profile>-->
-<!--	</profiles>-->
 	<profiles>
 		<profile>
 			<id>jib-push-to-dockerhub</id>
@@ -186,10 +111,10 @@
 					<plugin>
 						<groupId>com.google.cloud.tools</groupId>
 						<artifactId>jib-maven-plugin</artifactId>
-						<version>3.2.1</version>
+						<version>2.5.2</version>
 						<configuration>
 							<from>
-								<image>openjdk:17</image>
+								<image>openjdk:15</image>
 							</from>
 							<container>
 								<ports>
@@ -204,7 +129,7 @@
 								<phase>package</phase>
 								<configuration>
 									<to>
-										<image>docker.io/simomrdjen/springboot-fullstack:latest</image>
+										<image>docker.io/simomrdjen/${app.image.name}:${app.image.tag}</image>
 									</to>
 								</configuration>
 								<goals>
@@ -216,7 +141,7 @@
 								<phase>package</phase>
 								<configuration>
 									<to>
-										<image>docker.io/simomrdjen/springboot-fullstack:latest</image>
+										<image>docker.io/simomrdjen/${app.image.name}:latest</image>
 									</to>
 								</configuration>
 								<goals>
@@ -241,7 +166,7 @@
 						<version>2.5.2</version>
 						<configuration>
 							<from>
-								<image>openjdk:17</image>
+								<image>openjdk:15</image>
 							</from>
 							<container>
 								<ports>
@@ -256,7 +181,7 @@
 								<phase>package</phase>
 								<configuration>
 									<to>
-										<image>simomrdjen/springboot-fullstack:latest</image>
+										<image>simomrdjen/${app.image.name}:${app.image.tag}</image>
 									</to>
 								</configuration>
 								<goals>
@@ -268,7 +193,7 @@
 								<phase>package</phase>
 								<configuration>
 									<to>
-										<image>simomrdjen/springboot-fullstack:latest</image>
+										<image>simomrdjen/${app.image.name}:latest</image>
 									</to>
 								</configuration>
 								<goals>
@@ -354,3 +279,376 @@
 		</profile>
 	</profiles>
 </project>
+
+
+		<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">-->
+<!--	<modelVersion>4.0.0</modelVersion>-->
+<!--	<parent>-->
+<!--		<groupId>org.springframework.boot</groupId>-->
+<!--		<artifactId>spring-boot-starter-parent</artifactId>-->
+<!--		<version>2.7.1</version>-->
+<!--		<relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
+<!--	</parent>-->
+<!--	<groupId>com.example</groupId>-->
+<!--	<artifactId>demo</artifactId>-->
+<!--	<version>0.0.1-SNAPSHOT</version>-->
+<!--	<name>demo</name>-->
+<!--	<description>Demo project for Spring Boot</description>-->
+<!--	<properties>-->
+<!--		<java.version>17</java.version>-->
+<!--		<maven.compiler.source>17</maven.compiler.source>-->
+<!--		<maven.compiler.target>17</maven.compiler.target>-->
+<!--		<app.image.name>springboot-fullstack</app.image.name>-->
+<!--		<app.image.tag/>-->
+<!--	</properties>-->
+<!--	<dependencies>-->
+
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-web</artifactId>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-devtools</artifactId>-->
+<!--			<scope>runtime</scope>-->
+<!--			<optional>true</optional>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.projectlombok</groupId>-->
+<!--			<artifactId>lombok</artifactId>-->
+<!--			<optional>true</optional>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-test</artifactId>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/com.h2database/h2 &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>com.h2database</groupId>-->
+<!--			<artifactId>h2</artifactId>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.assertj/assertj-core &ndash;&gt;-->
+<!--&lt;!&ndash;		<dependency>&ndash;&gt;-->
+<!--&lt;!&ndash;			<groupId>org.assertj</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;			<artifactId>assertj-core</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;			<version>3.23.1</version>&ndash;&gt;-->
+<!--&lt;!&ndash;			<scope>test</scope>&ndash;&gt;-->
+<!--&lt;!&ndash;		</dependency>&ndash;&gt;-->
+
+
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-data-jpa</artifactId>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>org.postgresql</groupId>-->
+<!--			<artifactId>postgresql</artifactId>-->
+<!--			<scope>runtime</scope>-->
+<!--		</dependency>-->
+
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-autoconfigure</artifactId>-->
+<!--			<version>2.6.2</version>-->
+<!--		</dependency>-->
+<!--	</dependencies>-->
+
+<!--	<build>-->
+<!--		<plugins>-->
+<!--			<plugin>-->
+<!--				<groupId>org.springframework.boot</groupId>-->
+<!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--				<configuration>-->
+<!--					<excludes>-->
+<!--						<exclude>-->
+<!--							<groupId>org.projectlombok</groupId>-->
+<!--							<artifactId>lombok</artifactId>-->
+<!--						</exclude>-->
+<!--					</excludes>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
+
+<!--			<plugin>-->
+<!--				<groupId>com.google.cloud.tools</groupId>-->
+<!--				<artifactId>jib-maven-plugin</artifactId>-->
+<!--				<version>3.2.1</version>-->
+<!--				<configuration>-->
+
+<!--					<from>-->
+<!--						<image>openjdk:17</image>-->
+<!--					</from>-->
+
+<!--					<container>-->
+<!--						<mainClass>com.example.demo.Main</mainClass>-->
+<!--						<ports>-->
+<!--							<port>8080</port>-->
+<!--						</ports>-->
+<!--						<format>OCI</format>-->
+<!--					</container>-->
+<!--					&lt;!&ndash;<allowInsecureRegistries>true</allowInsecureRegistries>&ndash;&gt;-->
+
+<!--				</configuration>-->
+<!--			</plugin>-->
+<!--		</plugins>-->
+<!--	</build>-->
+
+<!--&lt;!&ndash;	<profiles>&ndash;&gt;-->
+<!--&lt;!&ndash;		<profile>&ndash;&gt;-->
+<!--&lt;!&ndash;			<id>build-frontend</id>&ndash;&gt;-->
+<!--&lt;!&ndash;			<activation>&ndash;&gt;-->
+<!--&lt;!&ndash;				<activeByDefault>true</activeByDefault>&ndash;&gt;-->
+<!--&lt;!&ndash;			</activation>&ndash;&gt;-->
+<!--&lt;!&ndash;			<build>&ndash;&gt;-->
+<!--&lt;!&ndash;				<plugins>&ndash;&gt;-->
+<!--&lt;!&ndash;					<plugin>&ndash;&gt;-->
+<!--&lt;!&ndash;						<groupId>com.github.eirslett</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;						<artifactId>frontend-maven-plugin</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;						&lt;!&ndash; Use the latest released version:&ndash;&gt;-->
+<!--&lt;!&ndash;                                  https://repo1.maven.org/maven2/com/github/eirslett/frontend-maven-plugin/ &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;						<version>1.11.2</version>&ndash;&gt;-->
+<!--&lt;!&ndash;						<configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;							<nodeVersion>v4.6.0</nodeVersion>&ndash;&gt;-->
+<!--&lt;!&ndash;							<workingDirectory>src/frontend</workingDirectory>&ndash;&gt;-->
+<!--&lt;!&ndash;						</configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;						<executions>&ndash;&gt;-->
+<!--&lt;!&ndash;							<execution>&ndash;&gt;-->
+<!--&lt;!&ndash;								<id>install node and npm</id>&ndash;&gt;-->
+<!--&lt;!&ndash;								<goals>&ndash;&gt;-->
+<!--&lt;!&ndash;									<goal>install-node-and-npm</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;								</goals>&ndash;&gt;-->
+<!--&lt;!&ndash;								<configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;									<nodeVersion>v15.4.0</nodeVersion>&ndash;&gt;-->
+<!--&lt;!&ndash;									<npmVersion>7.3.0</npmVersion>&ndash;&gt;-->
+<!--&lt;!&ndash;								</configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;							</execution>&ndash;&gt;-->
+<!--&lt;!&ndash;							<execution>&ndash;&gt;-->
+<!--&lt;!&ndash;								<id>npm install</id>&ndash;&gt;-->
+<!--&lt;!&ndash;								<goals>&ndash;&gt;-->
+<!--&lt;!&ndash;									<goal>npm</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;								</goals>&ndash;&gt;-->
+<!--&lt;!&ndash;								<configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;									<arguments>install</arguments>&ndash;&gt;-->
+<!--&lt;!&ndash;								</configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;							</execution>&ndash;&gt;-->
+<!--&lt;!&ndash;							<execution>&ndash;&gt;-->
+<!--&lt;!&ndash;								<id>npm run build</id>&ndash;&gt;-->
+<!--&lt;!&ndash;								<goals>&ndash;&gt;-->
+<!--&lt;!&ndash;									<goal>npm</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;								</goals>&ndash;&gt;-->
+<!--&lt;!&ndash;								<configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;									<arguments>run build</arguments>&ndash;&gt;-->
+<!--&lt;!&ndash;								</configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;							</execution>&ndash;&gt;-->
+<!--&lt;!&ndash;						</executions>&ndash;&gt;-->
+<!--&lt;!&ndash;					</plugin>&ndash;&gt;-->
+<!--&lt;!&ndash;					<plugin>&ndash;&gt;-->
+<!--&lt;!&ndash;						<artifactId>maven-resources-plugin</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;						<executions>&ndash;&gt;-->
+<!--&lt;!&ndash;							<execution>&ndash;&gt;-->
+<!--&lt;!&ndash;								<id>copy-build-folder</id>&ndash;&gt;-->
+<!--&lt;!&ndash;								<phase>process-classes</phase>&ndash;&gt;-->
+<!--&lt;!&ndash;								<goals>&ndash;&gt;-->
+<!--&lt;!&ndash;									<goal>copy-resources</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;								</goals>&ndash;&gt;-->
+<!--&lt;!&ndash;								<configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;									<resources>&ndash;&gt;-->
+<!--&lt;!&ndash;										<resource>&ndash;&gt;-->
+<!--&lt;!&ndash;											<directory>src/frontend/build</directory>&ndash;&gt;-->
+<!--&lt;!&ndash;										</resource>&ndash;&gt;-->
+
+<!--&lt;!&ndash;									</resources>&ndash;&gt;-->
+<!--&lt;!&ndash;									<outputDirectory>${basedir}/target/classes/static</outputDirectory>&ndash;&gt;-->
+<!--&lt;!&ndash;								</configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;							</execution>&ndash;&gt;-->
+<!--&lt;!&ndash;						</executions>&ndash;&gt;-->
+<!--&lt;!&ndash;					</plugin>&ndash;&gt;-->
+<!--&lt;!&ndash;				</plugins>&ndash;&gt;-->
+<!--&lt;!&ndash;			</build>&ndash;&gt;-->
+<!--&lt;!&ndash;		</profile>&ndash;&gt;-->
+<!--&lt;!&ndash;	</profiles>&ndash;&gt;-->
+<!--	<profiles>-->
+<!--		<profile>-->
+<!--			<id>jib-push-to-dockerhub</id>-->
+<!--			<activation>-->
+<!--				<activeByDefault>false</activeByDefault>-->
+<!--			</activation>-->
+<!--			<build>-->
+<!--				<plugins>-->
+<!--					<plugin>-->
+<!--						<groupId>com.google.cloud.tools</groupId>-->
+<!--						<artifactId>jib-maven-plugin</artifactId>-->
+<!--						<version>3.2.1</version>-->
+<!--						<configuration>-->
+<!--							<from>-->
+<!--								<image>openjdk:17</image>-->
+<!--							</from>-->
+<!--							<container>-->
+<!--								<ports>-->
+<!--									<port>8080</port>-->
+<!--								</ports>-->
+<!--								<format>OCI</format>-->
+<!--							</container>-->
+<!--						</configuration>-->
+<!--						<executions>-->
+<!--							<execution>-->
+<!--								<id>push-custom-tag</id>-->
+<!--								<phase>package</phase>-->
+<!--								<configuration>-->
+<!--									<to>-->
+<!--										<image>docker.io/simomrdjen/springboot-fullstack:latest</image>-->
+<!--									</to>-->
+<!--								</configuration>-->
+<!--								<goals>-->
+<!--									<goal>build</goal>-->
+<!--								</goals>-->
+<!--							</execution>-->
+<!--							<execution>-->
+<!--								<id>push-latest-tag</id>-->
+<!--								<phase>package</phase>-->
+<!--								<configuration>-->
+<!--									<to>-->
+<!--										<image>docker.io/simomrdjen/springboot-fullstack:latest</image>-->
+<!--									</to>-->
+<!--								</configuration>-->
+<!--								<goals>-->
+<!--									<goal>build</goal>-->
+<!--								</goals>-->
+<!--							</execution>-->
+<!--						</executions>-->
+<!--					</plugin>-->
+<!--				</plugins>-->
+<!--			</build>-->
+<!--		</profile>-->
+<!--		<profile>-->
+<!--			<id>jib-push-to-local</id>-->
+<!--			<activation>-->
+<!--				<activeByDefault>false</activeByDefault>-->
+<!--			</activation>-->
+<!--			<build>-->
+<!--				<plugins>-->
+<!--					<plugin>-->
+<!--						<groupId>com.google.cloud.tools</groupId>-->
+<!--						<artifactId>jib-maven-plugin</artifactId>-->
+<!--						<version>2.5.2</version>-->
+<!--						<configuration>-->
+<!--							<from>-->
+<!--								<image>openjdk:17</image>-->
+<!--							</from>-->
+<!--							<container>-->
+<!--								<ports>-->
+<!--									<port>8080</port>-->
+<!--								</ports>-->
+<!--								<format>OCI</format>-->
+<!--							</container>-->
+<!--						</configuration>-->
+<!--						<executions>-->
+<!--							<execution>-->
+<!--								<id>push-custom-tag</id>-->
+<!--								<phase>package</phase>-->
+<!--								<configuration>-->
+<!--									<to>-->
+<!--										<image>simomrdjen/springboot-fullstack:latest</image>-->
+<!--									</to>-->
+<!--								</configuration>-->
+<!--								<goals>-->
+<!--									<goal>dockerBuild</goal>-->
+<!--								</goals>-->
+<!--							</execution>-->
+<!--							<execution>-->
+<!--								<id>push-latest-tag</id>-->
+<!--								<phase>package</phase>-->
+<!--								<configuration>-->
+<!--									<to>-->
+<!--										<image>simomrdjen/springboot-fullstack:latest</image>-->
+<!--									</to>-->
+<!--								</configuration>-->
+<!--								<goals>-->
+<!--									<goal>dockerBuild</goal>-->
+<!--								</goals>-->
+<!--							</execution>-->
+<!--						</executions>-->
+<!--					</plugin>-->
+<!--				</plugins>-->
+<!--			</build>-->
+<!--		</profile>-->
+<!--		<profile>-->
+<!--			<id>build-frontend</id>-->
+<!--			<activation>-->
+<!--				<activeByDefault>true</activeByDefault>-->
+<!--			</activation>-->
+<!--			<build>-->
+<!--				<plugins>-->
+<!--					<plugin>-->
+<!--						<groupId>com.github.eirslett</groupId>-->
+<!--						<artifactId>frontend-maven-plugin</artifactId>-->
+<!--						&lt;!&ndash; Use the latest released version:-->
+<!--                        https://repo1.maven.org/maven2/com/github/eirslett/frontend-maven-plugin/ &ndash;&gt;-->
+<!--						<version>1.11.2</version>-->
+<!--						<configuration>-->
+<!--							<nodeVersion>v4.6.0</nodeVersion>-->
+<!--							<workingDirectory>src/frontend</workingDirectory>-->
+<!--						</configuration>-->
+<!--						<executions>-->
+<!--							<execution>-->
+<!--								<id>install node and npm</id>-->
+<!--								<goals>-->
+<!--									<goal>install-node-and-npm</goal>-->
+<!--								</goals>-->
+<!--								<configuration>-->
+<!--									<nodeVersion>v15.4.0</nodeVersion>-->
+<!--									<npmVersion>7.3.0</npmVersion>-->
+<!--								</configuration>-->
+<!--							</execution>-->
+<!--							<execution>-->
+<!--								<id>npm install</id>-->
+<!--								<goals>-->
+<!--									<goal>npm</goal>-->
+<!--								</goals>-->
+<!--								<configuration>-->
+<!--									<arguments>install</arguments>-->
+<!--								</configuration>-->
+<!--							</execution>-->
+<!--							<execution>-->
+<!--								<id>npm run build</id>-->
+<!--								<goals>-->
+<!--									<goal>npm</goal>-->
+<!--								</goals>-->
+<!--								<configuration>-->
+<!--									<arguments>run build</arguments>-->
+<!--								</configuration>-->
+<!--							</execution>-->
+<!--						</executions>-->
+<!--					</plugin>-->
+<!--					<plugin>-->
+<!--						<artifactId>maven-resources-plugin</artifactId>-->
+<!--						<executions>-->
+<!--							<execution>-->
+<!--								<id>copy-build-folder</id>-->
+<!--								<phase>process-classes</phase>-->
+<!--								<goals>-->
+<!--									<goal>copy-resources</goal>-->
+<!--								</goals>-->
+<!--								<configuration>-->
+<!--									<resources>-->
+<!--										<resource>-->
+<!--											<directory>src/frontend/build</directory>-->
+<!--										</resource>-->
+
+<!--									</resources>-->
+<!--									<outputDirectory>${basedir}/target/classes/static</outputDirectory>-->
+<!--								</configuration>-->
+<!--							</execution>-->
+<!--						</executions>-->
+<!--					</plugin>-->
+<!--				</plugins>-->
+<!--			</build>-->
+<!--		</profile>-->
+<!--	</profiles>-->
+<!--</project>-->
